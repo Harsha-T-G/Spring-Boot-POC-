@@ -1,0 +1,5 @@
+springdoc:
+  api-docs:
+    enabled: ${RESOLVEHUB_OPENAPI_ENABLED:true}
+  swagger-ui:
+    enabled: ${RESOLVEHUB_OPENAPI_ENABLED:true}

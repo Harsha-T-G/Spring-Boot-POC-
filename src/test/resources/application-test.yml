@@ -1,0 +1,14 @@
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+  main:
+    banner-mode: off
+
+resolvehub:
+  security:
+    seed:
+      enabled: false

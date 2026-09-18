@@ -1,0 +1,51 @@
+
+spring:
+  application:
+    name: resolvehub-lite
+  datasource:
+    url: ${RESOLVEHUB_DB_URL:jdbc:postgresql://localhost:5432/resolvehub}
+    username: ${RESOLVEHUB_DB_USERNAME:resolvehub}
+    password: ${RESOLVEHUB_DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+
+info:
+  app:
+    name: ${spring.application.name}
+    version: ${project.version:1.0.0-SNAPSHOT}
+
+resolvehub:
+  paging:
+    default-size: 20
+    max-size: 100
+
+springdoc:
+  api-docs:
+    enabled: ${RESOLVEHUB_OPENAPI_ENABLED:false}
+  packages-to-scan: com.codewalnut.resolvehub.controller
+  paths-to-match: /api/**
+  swagger-ui:
+    enabled: ${RESOLVEHUB_OPENAPI_ENABLED:false}
+    path: /swagger-ui.html
+    persist-authorization: false
+    try-it-out-enabled: true
+    with-credentials: true
+
+logging:
+  level:
+    org.hibernate.engine.jdbc.spi.SqlExceptionHelper: "OFF"
+  pattern:
+    level: "%5p [traceId=%X{traceId:-}]"

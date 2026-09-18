@@ -1,0 +1,46 @@
+
+target/
+.idea/
+.vscode/
+*.iml
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+
+# Local review and verification artifacts
+.mergemitra/
+review-reports/
+validation-reports/
+docs/self-review.md
+docs/plans/review-remediation.md
+docs/verification.md
+docs/tdd-evidence.md
+
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+*.iws
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
