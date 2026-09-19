@@ -19,7 +19,6 @@ src/main/java/com/codewalnut/resolvehub/
   repository/     Spring Data JPA repositories, projections and specifications
   security/       authentication, authorization and request-security filters
   service/        business use cases, transactions and orchestration
-  validation/     reusable Bean Validation constraints and validators
 ```
 
 Create a package or class only when the current approved task needs it. Do not

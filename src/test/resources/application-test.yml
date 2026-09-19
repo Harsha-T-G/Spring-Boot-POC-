@@ -9,6 +9,5 @@ spring:
     banner-mode: off
 
 resolvehub:
-  security:
-    seed:
-      enabled: false
+  seed:
+    enabled: false

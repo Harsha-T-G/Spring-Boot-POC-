@@ -25,15 +25,14 @@ class OpenApiIntegrationTest extends ApiScenarioTestSupport {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.info.title").value("ResolveHub Lite API"))
                 .andExpect(jsonPath("$.info.version").value("1.0.0-SNAPSHOT"))
-                .andExpect(jsonPath("$.paths['/api/csrf']").exists())
+                .andExpect(jsonPath("$.paths['/api/csrf']").doesNotExist())
                 .andExpect(jsonPath("$.paths['/api/v1/tickets']").exists())
                 .andExpect(jsonPath("$.paths['/api/v1/tickets/{id}/claim']").exists())
                 .andExpect(jsonPath("$.paths['/api/v1/reports/summary']").exists())
                 .andExpect(jsonPath("$.components.securitySchemes").doesNotExist())
-                .andExpect(jsonPath("$.paths['/api/v1/users'].post").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/users']").doesNotExist())
                 .andExpect(jsonPath("$.paths['/api/v1/tickets'].post.security").isEmpty())
                 .andExpect(jsonPath("$.paths['/api/v1/tickets'].get.security").isEmpty())
-                .andExpect(jsonPath("$.paths['/api/csrf'].get.parameters").doesNotExist())
                 .andExpect(jsonPath("$.paths['/api/v1/tickets'].post.responses['201']").exists());
     }
 

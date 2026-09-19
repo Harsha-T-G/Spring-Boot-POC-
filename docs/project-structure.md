@@ -1,8 +1,8 @@
 # Java project structure
 
-ResolveHub uses conventional Maven layout and ECC's layered Spring Boot
-architecture, matching Task 14 Product Catalog. It is one application, not
-one Java module per capability specification.
+ResolveHub uses conventional Maven layout and a layered Spring Boot
+architecture. It is one application, not one Java module per capability
+specification.
 
 ```text
 SpringBootPOC/
@@ -22,7 +22,7 @@ SpringBootPOC/
         dto/          request and response records
         mapper/       entity-to-response conversion
         exception/    business failures and safe HTTP error mapping
-        security/     authentication, CSRF and trace filters
+        security/     authentication and trace filters
       resources/
         application.yml
         db/migration/ V1 and V2 Flyway migrations

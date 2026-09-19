@@ -52,16 +52,13 @@ ADMIN permissions consistently at HTTP and service boundaries.
   PostgreSQL. Lookups use the same PostgreSQL LOWER normalization as the unique
   index; distinct lowercase Unicode usernames must not make each other's login
   ambiguous.
-- **IA-REQ-011:** Authenticated state changes require a CSRF cookie and matching
-  masked header token obtained from authenticated GET `/api/csrf`. Authentication
-  runs before CSRF: invalid credentials return 401; missing or invalid CSRF for
-  an authenticated caller returns safe JSON 403. Basic clients need no session. The
-  custom filter replaces the default pre-authentication CSRF registration.
-- **IA-REQ-012:** Both provisioning and authentication enforce the BCrypt limit
-  of 72 UTF-8 bytes. Overlong authentication performs a dummy BCrypt comparison
-  and fails with 401 rather than permitting prefix-only matching.
+- **IA-REQ-011:** HTTP Basic is stateless. CSRF tokens, CSRF cookies and
+  user-management APIs are out of scope. Invalid credentials return 401.
+- **IA-REQ-012:** Authentication enforces the BCrypt limit of 72 UTF-8 bytes.
+  Overlong authentication performs a dummy BCrypt comparison and fails with 401
+  rather than permitting prefix-only matching.
 
-## Approved Swagger login and user creation extension
+## Approved Swagger login extension
 
 - Anonymous Swagger UI, API documentation and direct API calls return 401 with
   `WWW-Authenticate: Basic realm="ResolveHub"`, including HTML Accept. The browser
@@ -69,26 +66,17 @@ ADMIN permissions consistently at HTTP and service boundaries.
   login, login redirect or application authentication session. HTTPS is required
   outside localhost. Invalid credentials remain 401.
 - Swagger has no Authorize button or operation lock icons. Requests use the
-  browser-managed same-origin Basic credentials; a request interceptor obtains a fresh masked CSRF
-  token automatically before writes. No passwords or tokens are stored in web storage.
-- `POST /api/v1/users` is ADMIN-only at HTTP and service boundaries. It accepts
-  trimmed username (1–100 code points, no colon because HTTP Basic uses it as
-  the credential separator), nonblank password (at most 72 UTF-8 bytes),
-  and a nonempty set of existing roles. New users are enabled. Response 201 contains
-  id, username, roles and enabled, never password/hash. Duplicate username returns
-  409; invalid input 400; anonymous 401; authenticated non-admin 403.
-- This extends identity-access only; no user listing, editing, deletion or new roles.
-- Implementation order: failing security/API tests; Basic challenge and Swagger
-  configuration; user DTO/controller/service; focused tests and JDK 21 clean verify.
-- Verify: `./mvnw -Dtest=SwaggerBasicAuthenticationIntegrationTest,UserCreationApiIntegrationTest test`
-  then `./mvnw clean verify`. Tests mirror config/controller/service packages and
-  use PostgreSQL Testcontainers and Given-When-Then names. Existing code-style and
-  no-schema/dependency-change boundaries remain applicable.
+  browser-managed same-origin Basic credentials. No passwords or tokens are stored
+  in web storage.
+- User-management APIs remain out of scope. Development identities are seeded in
+  the `dev` profile from environment variables.
+- Verify: `./mvnw -Dtest=SwaggerBasicAuthenticationIntegrationTest,StatelessBasicSecurityIntegrationTest test`
+  then `./mvnw clean verify`.
 
 ## Commands
 
 - Focused identity tests:
-  `./mvnw -Dtest=AppUserRepositoryTest,DatabaseUserDetailsServiceTest,DatabaseAuthenticationIntegrationTest,SecurityAccessIntegrationTest,SecurityErrorWebMvcTest,CsrfSecurityIntegrationTest,DevelopmentUserSeederIntegrationTest test`
+  `./mvnw -Dtest=AppUserRepositoryTest,DatabaseUserDetailsServiceTest,DatabaseAuthenticationIntegrationTest,SecurityAccessIntegrationTest,SecurityErrorWebMvcTest,StatelessBasicSecurityIntegrationTest,DevelopmentUserSeederIntegrationTest test`
 - Related verification: `./mvnw test`
 
 ## Project structure

@@ -16,26 +16,12 @@ curl -i --user customer http://localhost:8080/api/v1/tickets
 
 Expected: 200, 200, 401, 200 respectively.
 
-## CSRF setup for writes
-
-The write examples require `jq` and a private temporary cookie file. Obtain one
-client token before the following commands; keep its cookie and masked header
-together. HTTP Basic credentials are still checked on every request, including
-when switching roles below. This cookie is not a login session.
-
-```bash
-csrf_cookie_file=$(mktemp)
-csrf_token=$(curl --fail --silent --show-error --user customer \
-  --cookie-jar "$csrf_cookie_file" http://localhost:8080/api/csrf | jq -r '.token')
-```
-
-An authenticated write without the cookie/header pair returns 403. Missing or
-invalid Basic credentials return 401. Do not print or log cookie/token values.
-
 ## Customer creates and reads
 
+HTTP Basic is sufficient for writes. CSRF tokens are not used.
+
 ```bash
-curl -i --cookie "$csrf_cookie_file" -H "X-XSRF-TOKEN: $csrf_token" --user customer -X POST http://localhost:8080/api/v1/tickets \
+curl -i --user customer -X POST http://localhost:8080/api/v1/tickets \
   -H 'Content-Type: application/json' \
   -H 'X-Trace-Id: d56b327c-e583-4344-a9a6-9c36c321157e' \
   --data '{"title":"Cannot access dashboard","description":"Dashboard access fails after signing into the application.","priority":"HIGH","tags":[" Access ","access","dashboard"]}'
@@ -56,13 +42,13 @@ Expected: 200, filtered page, 400.
 ## Invalid transition, claim, access denial and resolve
 
 ```bash
-curl -i --cookie "$csrf_cookie_file" -H "X-XSRF-TOKEN: $csrf_token" --user admin -X PATCH "http://localhost:8080/api/v1/tickets/$ticket_id/status" \
+curl -i --user admin -X PATCH "http://localhost:8080/api/v1/tickets/$ticket_id/status" \
   -H 'Content-Type: application/json' \
   --data '{"status":"RESOLVED","resolutionSummary":"The access configuration was corrected and verified."}'
-curl -i --cookie "$csrf_cookie_file" -H "X-XSRF-TOKEN: $csrf_token" --user agent-one -X POST "http://localhost:8080/api/v1/tickets/$ticket_id/claim"
+curl -i --user agent-one -X POST "http://localhost:8080/api/v1/tickets/$ticket_id/claim"
 curl -i --user agent-two "http://localhost:8080/api/v1/tickets/$ticket_id"
-curl -i --cookie "$csrf_cookie_file" -H "X-XSRF-TOKEN: $csrf_token" --user agent-two -X POST "http://localhost:8080/api/v1/tickets/$ticket_id/claim"
-curl -i --cookie "$csrf_cookie_file" -H "X-XSRF-TOKEN: $csrf_token" --user agent-one -X PATCH "http://localhost:8080/api/v1/tickets/$ticket_id/status" \
+curl -i --user agent-two -X POST "http://localhost:8080/api/v1/tickets/$ticket_id/claim"
+curl -i --user agent-one -X PATCH "http://localhost:8080/api/v1/tickets/$ticket_id/status" \
   -H 'Content-Type: application/json' \
   --data '{"status":"RESOLVED","resolutionSummary":"The access configuration was corrected and verified."}'
 ```
@@ -76,7 +62,7 @@ Use the `customerId` returned by the first create response:
 
 ```bash
 customer_id='paste-customer-uuid'
-curl -i --cookie "$csrf_cookie_file" -H "X-XSRF-TOKEN: $csrf_token" --user admin -X POST http://localhost:8080/api/v1/tickets \
+curl -i --user admin -X POST http://localhost:8080/api/v1/tickets \
   -H 'Content-Type: application/json' \
   --data "{\"title\":\"Admin-created ticket\",\"description\":\"An administrator recorded this customer support request.\",\"priority\":\"LOW\",\"customerId\":\"$customer_id\"}"
 curl -i --user admin http://localhost:8080/api/v1/reports/summary
@@ -99,10 +85,3 @@ PostgreSQL Testcontainers, expects 200/409, and reads the final ticket. This
 requires Docker and does not use the running development database. A manual
 alternative is two terminals claiming the same new OPEN ticket, but manual
 timing alone is not the repeatable regression proof.
-
-After the demonstration, remove only the temporary cookie file and token:
-
-```bash
-rm -- "$csrf_cookie_file"
-unset csrf_cookie_file csrf_token
-```

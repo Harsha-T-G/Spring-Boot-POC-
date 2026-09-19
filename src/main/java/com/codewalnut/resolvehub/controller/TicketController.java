@@ -52,7 +52,6 @@ public class TicketController {
             description = "Customers create for themselves; administrators must supply a customerId.")
     @ApiResponse(responseCode = "201", description = "Ticket created")
     @SecurityRequirement(name = "basicAuth")
-    @SecurityRequirement(name = "csrfToken")
     public ResponseEntity<TicketResponse> create(
             @Valid @RequestBody CreateTicketRequest request,
             Authentication authentication) {
@@ -87,7 +86,6 @@ public class TicketController {
     @Operation(summary = "Claim an open ticket",
             description = "Support agents only. A competing or repeated claim returns 409 Conflict.")
     @SecurityRequirement(name = "basicAuth")
-    @SecurityRequirement(name = "csrfToken")
     public TicketResponse claim(@PathVariable UUID id, Authentication authentication) {
         return ticketClaimService.claim(id, authentication.getName());
     }
@@ -96,7 +94,6 @@ public class TicketController {
     @Operation(summary = "Resolve a claimed ticket",
             description = "The assigned support agent or an administrator can resolve an IN_PROGRESS ticket.")
     @SecurityRequirement(name = "basicAuth")
-    @SecurityRequirement(name = "csrfToken")
     public TicketResponse resolve(
             @PathVariable UUID id,
             @Valid @RequestBody UpdateTicketStatusRequest request,

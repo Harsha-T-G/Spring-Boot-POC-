@@ -6,9 +6,8 @@ PostgreSQL owns durable state and concurrency; Flyway owns schema changes.
 
 ## Delivery status
 
-The review fixes and missing behavioral coverage are implemented. Run the
-checked-in Maven verification lifecycle before release. The interactive
-development-profile demonstration remains pending.
+HTTP Basic authenticates every non-public request. User-management APIs are out
+of scope. Run `./mvnw clean verify` locally before release.
 
 ## Start locally
 
@@ -64,18 +63,13 @@ on the first Maven/container run. Use the checked-in Maven wrapper.
 
 Seed passwords must be nonblank, not the example placeholder, and at most 72
 UTF-8 bytes for BCrypt. No real passwords are checked in. Non-development
-profiles do not seed users; an existing ADMIN can provision users through the API.
+profiles do not seed users. User-management APIs are out of scope.
 
 ## API
 
 HTTP Basic is stateless. Use HTTPS outside localhost. Only GET `/api/info` and
 GET `/actuator/health` are public. `/actuator/info` requires authentication;
-other Actuator endpoints are not exposed.
-
-State-changing requests require CSRF protection. Authenticate at GET `/api/csrf`,
-retain the `XSRF-TOKEN` cookie and send the returned masked `token` in the
-`X-XSRF-TOKEN` header with each POST/PATCH. HTTP Basic is still required on every
-request. Browsers reuse credentials from their native HTTP Basic prompt.
+other Actuator endpoints are not exposed. Each request carries Basic credentials.
 No application login session is created. See the curl workflow for non-browser clients.
 
 ### Swagger UI
@@ -90,15 +84,9 @@ To execute secured operations from Swagger UI:
 1. Open Swagger; unauthenticated visitors receive the browser's built-in
    username/password prompt, not a separate login page.
 2. Enter a database username/password. The browser reuses these Basic credentials.
-3. Execute operations directly. There is no Authorize button or lock icon, and
-   CSRF tokens are fetched automatically before writes. Permissions still apply.
-4. ADMIN can call `POST /api/v1/users` with `username`, `password`, and a `roles`
-   array (CUSTOMER, SUPPORT_AGENT, ADMIN). Success is 201; non-admin is 403;
-   missing authentication is 401. Passwords/hashes are never returned.
-   Usernames are trimmed, limited to 100 code points, and cannot contain `:`.
-   Authentication and uniqueness use PostgreSQL `LOWER` consistently; distinct
-   lowercase Unicode usernames remain independent identities.
-5. Basic credentials are cached by the browser; there is no reliable application
+3. Execute operations directly. There is no Authorize button or lock icon.
+   Permissions still apply.
+4. Basic credentials are cached by the browser; there is no reliable application
    logout. Use a private window and close all private windows after testing,
    or clear the browser's cached authentication to switch users.
 
@@ -112,7 +100,6 @@ for `./mvnw clean verify`.
 | Method | Path | Permission | Success |
 | --- | --- | --- | --- |
 | POST | `/api/v1/tickets` | CUSTOMER self; ADMIN with `customerId` | 201 + Location |
-| GET | `/api/csrf` | Authenticated | 200 token + cookie |
 | GET | `/api/v1/tickets` | CUSTOMER owned; agent OPEN/assigned; ADMIN all | 200 page |
 | GET | `/api/v1/tickets/{id}` | Same visibility | 200 |
 | POST | `/api/v1/tickets/{id}/claim` | SUPPORT_AGENT only | 200 |
@@ -213,7 +200,7 @@ JAVA_HOME explicitly if your default Java differs.
 
 ## Limits
 
-No product frontend, user editing/deletion, attachments, notifications, OAuth/JWT, or
+No product frontend, user-management APIs, attachments, notifications, OAuth/JWT, or
 deployment automation. Development seeding is intended for one local startup,
 not concurrent multi-instance provisioning. Business event logs occur inside
 transactions and are not a durable audit trail; correlate them with the final

@@ -5,19 +5,17 @@ Status: Approved for autonomous in-scope execution on 2026-09-11
 
 ## OpenAPI checkpoint — 2026-09-13
 
-TASK-017 is complete. Springdoc 2.9.1 generates the seven supported API paths,
-documents Basic plus CSRF security, and serves Swagger UI in development while
-remaining disabled by default elsewhere. `./mvnw clean verify` passed all 131
-tests with no failures, errors or skips and built the executable JAR. Browser
-verification confirmed the rendered operations, schemas and authorization UI.
+TASK-017 is complete. Springdoc 2.9.1 generates the supported ticket, info and
+report API paths, documents HTTP Basic, and serves Swagger UI in development while
+remaining disabled by default elsewhere.
 
 ## Current review-remediation checkpoint — 2026-09-12
 
-User-authorized review fixes complete. JDK 21.0.12.1 clean/verify with JaCoCo:
-110 tests passed, no failures/errors/skips; 96.57% line and 80.68% branch coverage.
-See ../project-structure.md. Completed review reports are retained outside Git.
-TASK-016 still excludes the unperformed interactive Compose demonstration and
-any unauthorized publishing. Historical checkpoints below are superseded.
+## Spec-alignment checkpoint — 2026-09-19
+
+Removed out-of-scope CSRF and user-management APIs. HTTP Basic remains the
+authentication mechanism. TASK-016 still excludes the unperformed interactive
+Compose demonstration and any unauthorized publishing.
 
 ## Historical implementation checkpoint — 2026-09-12
 
@@ -102,13 +100,15 @@ substitute for successful PostgreSQL verification.
 
 ## Approved MergeMitra follow-up — 2026-09-18
 
-- [x] TASK-018: Align username lookup with LOWER uniqueness and reject Basic delimiters
-  - Acceptance: IA-REQ-003/010 and identity provisioning extension
-  - Verify: `./mvnw -Dtest=UserCreationApiIntegrationTest test`
+- [x] TASK-018: Align username lookup with LOWER uniqueness
+  - Acceptance: IA-REQ-003/010
+  - Verify: `./mvnw -Dtest=AppUserRepositoryTest test`
 - [x] TASK-019: Prove discriminating filters and bounded lazy tag loading
   - Acceptance: TI-REQ-008/009, TI-AC-010; mutation detects omitted predicates
   - Verify: `./mvnw -Dtest=TicketFilteringApiIntegrationTest,TicketTagBatchingIntegrationTest test`
 - [x] TASK-020: Apply review NITs and verify related security/error contracts
   - Acceptance: shared error factory, precise transition test, synchronized Swagger criteria
   - Verify: `./mvnw clean verify`
-  - Verification: 152 tests on native JDK 21; browser verification remains separate. Review reports are local-only.
+- [x] TASK-021: Remove out-of-scope user-management and CSRF extras
+  - Acceptance: original capstone REST/security contract
+  - Verify: `./mvnw -Dtest=StatelessBasicSecurityIntegrationTest,OpenApiIntegrationTest test`

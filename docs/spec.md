@@ -39,17 +39,14 @@ following capability specifications are the product contract:
 - `resolutionSummary` is persisted on Ticket and required for resolution.
 - Summary maps contain every enum key with zero values where absent.
 - UUID is the accepted incoming trace-id format.
-- HTTP Basic remains stateless. Authenticated GET `/api/csrf` supplies a masked
-  CSRF token; state changes require its cookie and `X-XSRF-TOKEN` header.
-  Authentication precedes CSRF validation so invalid credentials remain 401.
+- HTTP Basic remains stateless. CSRF is not used; each request carries credentials.
 - Unauthorized agents are rejected before transition details for assigned tickets.
 - Tags are normalized before length validation; supplied count is checked before
   deduplication, and request collections are defensively copied.
 - Delivery uses a curl command file.
 - HTTP Basic challenges require the browser's native credential prompt before Swagger access.
-  Swagger has no authorization controls; writes acquire CSRF tokens automatically.
-  No custom login page or authentication session is used. ADMIN-only POST `/api/v1/users` provisions
-  enabled users with existing roles; see identity-access for its validation contract.
+  Swagger has no authorization controls. No custom login page or authentication session
+  is used. User-management APIs are out of scope; development users come from the `dev` seeder.
 - The `dev` profile enables authenticated OpenAPI JSON and Swagger UI for interactive API
   exploration; documentation is disabled by default in other profiles and does
-  not weaken Basic authentication, authorization or CSRF on business routes.
+  not weaken Basic authentication or authorization on business routes.

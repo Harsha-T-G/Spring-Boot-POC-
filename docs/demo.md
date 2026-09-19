@@ -23,7 +23,6 @@ the available web/unit test results honestly and identify the unfinished
 database verification; do not describe the final row as successful.
 
 For interactive requests, open `http://localhost:8080/swagger-ui.html` and sign
-in through the browser's native credential prompt. Swagger reuses Basic credentials and obtains CSRF tokens
-automatically, without Authorize or lock controls. Demonstrate ADMIN-only
-`POST /api/v1/users` and non-admin 403. Use a private window and close it afterward
+in through the browser's native credential prompt. Swagger reuses Basic credentials.
+Use a private window and close it afterward
 to avoid retaining the demonstration credentials in the browser.

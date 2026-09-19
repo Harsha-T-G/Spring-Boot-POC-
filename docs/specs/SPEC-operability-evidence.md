@@ -73,9 +73,8 @@ approved ResolveHub Lite behavior is secure, concurrent and test-driven.
 - **OE-REQ-018:** The development profile shall expose an OpenAPI 3 description
   and Swagger UI while non-development profiles keep both disabled by default.
 - **OE-REQ-019:** The OpenAPI description shall explain native browser HTTP Basic
-  authentication and automatic CSRF handling without exposing authorization
-  controls or weakening runtime security. The identity-access extension controls
-  this behavior; security schemes are omitted to keep Swagger free of lock icons.
+  authentication without exposing authorization controls or weakening runtime
+  security.
 - **OE-REQ-020:** OpenAPI shall describe the supported ResolveHub API paths,
   application metadata and validation-aware request/response schemas.
 
@@ -152,13 +151,12 @@ Production code contains no comments; tests use
   when documentation paths are requested, then OpenAPI and Swagger UI are not
   registered.
 - **OE-AC-014:** Given the generated OpenAPI document, when it is inspected,
-  then it contains the supported ticket, user-creation, CSRF, information and
-  reporting paths without security schemes or operation security requirements.
-  Swagger has no Authorize button or lock icons, as approved in
-  [the identity-access extension](SPEC-identity-access.md).
+  then it contains the supported ticket, information and reporting paths without
+  security schemes, operation security requirements, CSRF endpoints or
+  user-management paths. Swagger has no Authorize button or lock icons.
 - **OE-AC-015:** Given Swagger UI, when an authenticated user executes API
-  operations, then the same role authorization and CSRF rules enforced for
-  curl clients remain in effect.
+  operations, then the same role authorization rules enforced for curl clients
+  remain in effect.
 
 ## TDD seams
 
@@ -183,7 +181,7 @@ Production code contains no comments; tests use
 
 Product frontend UI, comments, attachments, notifications, messaging,
 microservices, SLA scheduling, JWT/OAuth2, cloud deployment, Kubernetes and
-user-management APIs beyond the approved ADMIN-only creation endpoint.
+user-management APIs.
 Swagger UI is limited to development API exploration.
 
 ## Success criteria

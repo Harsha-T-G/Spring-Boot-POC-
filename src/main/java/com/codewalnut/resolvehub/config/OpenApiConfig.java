@@ -21,7 +21,7 @@ public class OpenApiConfig {
                         .title("ResolveHub Lite API")
                         .version(version)
                         .description("Use the browser's built-in username/password prompt before opening Swagger. "
-                                + "Write requests include CSRF protection automatically; permissions are enforced by the server."));
+                                + "HTTP Basic authenticates each request; role permissions are enforced by the server."));
     }
 
     @Bean

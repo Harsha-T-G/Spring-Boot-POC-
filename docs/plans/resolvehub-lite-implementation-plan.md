@@ -141,7 +141,7 @@ Acceptance: OE-AC-001–OE-AC-015
 7. Prepare but do not create a commit, push or pull request without explicit
    authorization.
 8. RED/GREEN a development-only OpenAPI description and Swagger UI with
-   documented Basic/CSRF schemes and unchanged runtime security enforcement.
+   documented Basic authentication and unchanged runtime security enforcement.
 
 Checkpoint: all required tests pass without skips and documentation matches the
 verified implementation.

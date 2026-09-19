@@ -1,6 +1,5 @@
 package com.codewalnut.resolvehub.config;
 
-import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -32,17 +31,12 @@ class SwaggerBasicAuthenticationIntegrationTest extends ApiScenarioTestSupport {
         json.readTree(docs.getResponse().getContentAsString()).get("paths").forEach(path ->
                 path.forEach(operation -> assertThat(operation.path("security").isEmpty()).isTrue()));
         mvc.perform(get("/swagger-ui/swagger-initializer.js").with(credentials)).andExpect(status().isOk())
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("/api/csrf")));
-        var tokenResult = mvc.perform(get("/api/csrf").with(credentials)).andExpect(status().isOk()).andReturn();
-        var token = json.readTree(tokenResult.getResponse().getContentAsString());
-        Cookie cookie = tokenResult.getResponse().getCookie("XSRF-TOKEN");
-        assertThat(cookie).isNotNull();
-        assertThat(tokenResult.getRequest().getSession(false)).isNull();
-        mvc.perform(post("/api/v1/tickets").with(credentials).cookie(cookie)
-                .header(token.get("headerName").asText(), token.get("token").asText())
+                .andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString("/api/csrf"))));
+        var write = mvc.perform(post("/api/v1/tickets").with(credentials)
                 .contentType(MediaType.APPLICATION_JSON).content("""
                         {"title":"Browser ticket","description":"A sufficiently detailed browser ticket","priority":"HIGH"}
-                        """)).andExpect(status().isCreated());
+                        """)).andExpect(status().isCreated()).andReturn();
+        assertThat(write.getRequest().getSession(false)).isNull();
     }
 
     @Test

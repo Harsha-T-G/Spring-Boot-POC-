@@ -56,12 +56,11 @@ class SecurityErrorWebMvcTest {
     }
 
     @Test
-    void givenAuthenticatedBrowserWithoutCsrf_whenPosting_thenReturnTraceableForbidden() throws Exception {
-        mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post("/api/v1/tickets/any/claim")
+    void givenAuthenticatedCaller_whenCsrfEndpointRequested_thenReturnNotFound() throws Exception {
+        mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/api/csrf")
                         .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
                                 .httpBasic("customer", "unused-test-password")))
-                .andExpect(status().isForbidden()).andExpect(jsonPath("$.status").value(403))
-                .andExpect(jsonPath("$.traceId").isNotEmpty());
+                .andExpect(status().isNotFound());
     }
 
     @Test

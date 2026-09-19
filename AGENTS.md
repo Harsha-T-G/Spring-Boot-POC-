@@ -76,7 +76,6 @@ src/main/java/com/codewalnut/resolvehub/
   repository/     Spring Data JPA, projections and specifications
   security/       authentication, authorization and request filters
   service/        business rules, transactions and orchestration
-  validation/     reusable Bean Validation
 src/test/java/com/codewalnut/resolvehub/
   mirrors production packages; shared containers and fixtures live in support/
 ```

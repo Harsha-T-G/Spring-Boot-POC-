@@ -69,7 +69,7 @@ public class TicketService {
         var specification = TicketSpecifications.visibleAndFiltered(
                 findUser(username), status, priority, assignedAgentId, search, requestedPage.getSort());
         var result = ticketRepository.findAll(specification,
-                PageRequest.of(page, requestedPage.getPageSize()));
+                PageRequest.of(requestedPage.getPageNumber(), requestedPage.getPageSize()));
         return new TicketPageResponse(
                 result.getContent().stream().map(ticketMapper::toResponse).toList(), result.getNumber(),
                 result.getSize(), result.getTotalElements(), result.getTotalPages());
