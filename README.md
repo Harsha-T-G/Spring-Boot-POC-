@@ -194,7 +194,6 @@ JAVA_HOME explicitly if your default Java differs.
 - [Debugging](docs/debugging-notes.md)
 - [Diagrams](docs/diagram/diagrams.md)
 - [Curl workflows](docs/curl-commands.md)
-- [Ten-minute demo](docs/demo.md)
 - Development Swagger UI: `http://localhost:8080/swagger-ui.html`
 
 ## Limits
