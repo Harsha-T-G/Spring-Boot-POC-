@@ -190,7 +190,6 @@ JAVA_HOME explicitly if your default Java differs.
 - [Approved specification](docs/spec.md)
 - [Implementation plan](docs/plans/resolvehub-lite-implementation-plan.md)
 - [Task status](docs/plans/resolvehub-lite-tasks.md)
-- ECC skills guide: [Markdown](docs/ecc-skills-guide.md) · [PDF](docs/ecc-skills-guide.pdf)
 - [Concurrency](docs/concurrency-notes.md)
 - [Debugging](docs/debugging-notes.md)
 - [Diagrams](docs/diagram/diagrams.md)

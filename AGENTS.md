@@ -45,23 +45,6 @@ repository uses the Product Catalog exercise convention:
 - Read only the active plan item, affected specification, guidelines and source
   files needed for the current slice.
 
-## ECC integration
-
-The native Codex plugin `ecc@ecc` is available as an additional workflow
-toolbox. The repository-local SDD and TDD skills above remain authoritative for
-requirements, planning and behavior implementation.
-
-- Use ECC `springboot-verification` and `verification-loop` after implementing
-  a plan item and before declaring it complete.
-- Use ECC `springboot-security` or `security-review` when a change affects
-  authentication, authorization, request data, secrets or dependencies.
-- Use ECC `delivery-gate` before release, demonstration or pull-request
-  preparation.
-- Use ECC `springboot-patterns` and `java-coding-standards` as advisory material;
-  this repository's `.guidelines/` files win when guidance conflicts.
-- Do not copy ECC's plugin files, MCP configuration or hooks into this
-  repository. Codex owns the native plugin lifecycle and hook trust decision.
-
 ## Ownership and layout
 
 ```text

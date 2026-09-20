@@ -38,14 +38,10 @@ SpringBootPOC/
 ```
 
 Folders beside `src` are agent workflow/documentation, not Java packages.
-`entity`, `mapper`, `exception` and `security` have distinct responsibilities;
-ECC's short example does not prohibit them. No unused `util`, `validation`,
-service-interface or `impl` packages are required.
+`entity`, `mapper`, `exception` and `security` have distinct responsibilities.
+No unused `util`, `validation`, service-interface or `impl` packages are required.
 
 HTTP calls flow controller → service → repository. Controllers never query
 the database, entities never become API responses, and services own transactions.
 Tests mirror production packages, use Given-When-Then names and optional
 Arrange/Act/Assert phase comments. Production Java remains comment-free.
-
-Reference: Task14-Product-Catalog and installed ECC java-coding-standards /
-springboot-patterns. Repository guidelines win over illustrative skill snippets.
